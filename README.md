@@ -1,2 +1,2 @@
-# astro
+# Astro
 A social media site
