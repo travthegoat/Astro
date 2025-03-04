@@ -21,7 +21,7 @@ const LoginPage = () => {
 
             // check if the password is correct
             if (password === result[0].password_hash) {
-                Cookies.set('username', username, { expires: 7 });
+                Cookies.set('uid', result[0].user_id, { expires: 7 });
                 navigate('/main/');
             } else {
                 setError("Username or Password is incorrect!");

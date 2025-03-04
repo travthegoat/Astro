@@ -8,7 +8,7 @@ const MainLayout = () => {
     const navigate = useNavigate();
 
     useEffect(() => {
-        if (Cookies.get('username') === undefined) {
+        if (Cookies.get('uid') === undefined) {
             navigate('/auth/login');
         }
     }, []);

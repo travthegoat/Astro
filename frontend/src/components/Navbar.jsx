@@ -87,7 +87,7 @@ const Navbar = () => {
                 <NavLink
                     className="flex items-center gap-3 hover:bg-neutral-900 duration-300 h-12 pl-2 mr-7 rounded-md"
                     onClick={() => {
-                        Cookies.remove('username');
+                        Cookies.remove('uid');
                         navigate('/auth/login');
                     }}
                 >

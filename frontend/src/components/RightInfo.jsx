@@ -11,14 +11,14 @@ const RightInfo = () => {
     const [loading, setLoading] = useState(false); // to handle loading
 
     useEffect(() => {
-        const username = Cookies.get('username'); // get stored username
-        console.log(username);
+        const uid = Cookies.get('uid'); // get stored username
 
         const getUserData = async () => {
             setLoading(true);
             try {
-                const result = await fetchData(`/users/search?username=${username}`); // get user data from api
+                const result = await fetchData(`/users/${uid}`); // get user data from api
                 setUserData(result[0]);
+                console.log(result[0].profile_picture)
             } catch (err) {
                 console.error(err);
             } finally {
@@ -33,7 +33,7 @@ const RightInfo = () => {
             <div className="flex items-start gap-5 cursor-pointer">
                 <div className="hover:opacity-70">
                     <img
-                        src={profileImg}
+                        src={`http://localhost:3000${userData?.profile_picture}`}
                         alt=""
                         className="object-contain w-12 rounded-full"
                     />
