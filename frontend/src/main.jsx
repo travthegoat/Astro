@@ -16,6 +16,7 @@ import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import CompleteRegisterPage from "./pages/completeRegisterPage";
 import AddPostPage from "./pages/AddPostPage";
+import PostDetailPage from "./pages/PostDetailPage";
 
 const router = createBrowserRouter([
     {
@@ -43,7 +44,8 @@ const router = createBrowserRouter([
             { path: "/main/feed", element: <NewFeedPage /> },
             { path: "/main/search", element: <SearchPage /> },
             { path: "/main/:userId", element: <ProfilePage /> },
-            { path: "/main/add-post", element: <AddPostPage /> }
+            { path: "/main/add-post", element: <AddPostPage /> },
+            { path: "/main/posts/:postId", element: <PostDetailPage /> },
         ],
     },
 ]);

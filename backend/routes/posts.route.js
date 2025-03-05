@@ -41,12 +41,17 @@ postRouter.get('/:id', async (req, res) => {
 postRouter.post('/', upload.single("image"), async (req, res) => {
     const { user_id, caption } = req.body;
 
+    const [uuidRow] = await pool.query("SELECT UUID() as uuid");
+    const post_id = uuidRow[0].uuid;
+
     if (!req.file) return res.status(400).json({ error: "No file uploaded" });
 
     const imagePath = `/uploads/${req.file.filename}`;
     try {
-        const result = await pool.query("INSERT INTO posts (post_id, user_id, caption, image) VALUES (UUID(), ?, ?, ?)", [user_id, caption, imagePath]);
-        res.status(200).json({ message: "Successfully Created!"});
+        await pool.query("INSERT INTO posts (post_id, user_id, caption, image) VALUES (?, ?, ?, ?)", [post_id, user_id, caption, imagePath]);
+
+        const [row] = await pool.query("SELECT * FROM posts WHERE post_id = ?", post_id);
+        res.status(200).json({ message: "Successfully Created!", postId: row[0].post_id});
     } catch (err) {
         res.status(500).json({ error: err });
     }

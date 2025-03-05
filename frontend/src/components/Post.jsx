@@ -4,18 +4,19 @@ import { HiInbox, HiOutlineDotsHorizontal, HiThumbUp } from "react-icons/hi";
 import { IoThumbsUp } from "react-icons/io5";
 import postImg from "/post.png";
 import { fetchData } from "../../api";
+import { useNavigate } from "react-router-dom";
 
-const Post = ({ postData }) => {
-    const [userData, setUserData] = useState(); // to store user data
+const Post = ({ postData, notHome }) => {
+    const [userData, setUserData] = useState({}); // to store user data
     const [loading, setLoading] = useState(false); // to handle loading
+    const navigate = useNavigate(); // to navigate
 
     useEffect(() => {
-        const uid = postData.user_id;
-
+        if(!postData.user_id) return;
         const getUserData = async () => {
             setLoading(true);
             try {
-                const result = await fetchData(`/users/${uid}`);
+                const result = await fetchData(`/users/${postData.user_id}`);
                 setUserData(result[0]);
             } catch (err) {
                 console.error(err);
@@ -24,7 +25,7 @@ const Post = ({ postData }) => {
             }
         };
         getUserData();
-    }, []);
+    }, [postData?.user_id]);
 
     return (
         <div className="w-full h-auto justify-start bg-[#0b0b0b] border border-neutral-900 lg:rounded-lg pt-4">
@@ -51,21 +52,24 @@ const Post = ({ postData }) => {
                 </button>
             </div>
 
-            <div className="flex flex-col px-4 mt-4">
-                <h1 className="text-white text-lg">{postData?.caption}</h1>
+            <div className="cursor-pointer" onClick={() => navigate(`/main/posts/${postData.post_id}`)}>
+                <div className="flex flex-col px-4 mt-4">
+                    <h1 className="text-white text-lg">{postData?.caption}</h1>
+                </div>
+
+                {postData?.image ? (
+                    <div>
+                        <img
+                            src={`http://localhost:3000${postData?.image}`}
+                            className={`mt-4 w-full ${notHome ? 'object-contain' : 'object-cover h-120'}`}
+                            alt=""
+                        />
+                    </div>
+                ) : (
+                    <div></div>
+                )}
             </div>
 
-            {postData?.image ? (
-                <div>
-                    <img
-                        src={`http://localhost:3000${postData?.image}`}
-                        className="mt-4 w-full object-contain"
-                        alt=""
-                    />
-                </div>
-            ) : (
-                <div></div>
-            )}
 
             <div
                 className={`max-w-full border border-neutral-800 ${
