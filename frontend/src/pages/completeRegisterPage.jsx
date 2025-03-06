@@ -60,7 +60,7 @@ const CompleteRegisterPage = () => {
 
             <form onSubmit={submit} className="flex flex-col items-center w-full px-10 2xl:px-28 mt-10 2xl:mt-36">
                 <div className="flex justify-between w-full items-center">
-                    <img src={preview} alt="" className="w-36 rounded-full" />
+                    <img src={preview} alt="" className="w-36 h-36 rounded-full object-cover" />
 
                     <label className="cursor-pointer bg-white text-black rounded-md mt-5 text-xl font-semibold h-12 px-4 flex justify-center items-center mb-6 hover:bg-neutral-200">
                         Choose Image

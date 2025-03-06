@@ -35,7 +35,7 @@ const RightInfo = () => {
                     <img
                         src={`http://localhost:3000${userData?.profile_picture}`}
                         alt=""
-                        className="object-contain w-12 rounded-full"
+                        className="object-cover w-12 h-12 rounded-full"
                     />
                 </div>
 

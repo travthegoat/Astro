@@ -4,12 +4,15 @@ import Post from "../components/Post";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchData } from "../../api";
 import Comment from "../components/Comment";
+import AddComment from "../components/AddComment";
 
 const PostDetailPage = () => {
     const { postId } = useParams(); // to get the passed post id
     const [postData, setPostData] = useState({}); // to store post data
+    const [comments, setComments] = useState([]); // to store comments
     const [loading, setLoading] = useState(false); // to handle loading
     const navigate = useNavigate(); // to navigate
+    const [modal, setModal] = useState(false);
 
     useEffect(() => {
         const getPostData = async () => {
@@ -23,7 +26,21 @@ const PostDetailPage = () => {
                 setLoading(false);
             }
         };
+
+        const getComments = async () => {
+            setLoading(true);
+            try {
+                const result = await fetchData(`/posts/comment/${postId}`);
+                setComments(result);
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        }
+
         getPostData();
+        getComments();
     }, []);
 
     return (
@@ -39,15 +56,22 @@ const PostDetailPage = () => {
 
             <div className="mt-5 2xl:mt-10 lg:px-10">
                 {/* {postData.caption} */}
-                <Post postInfo={postData} notHome={true}/>
+                <Post
+                    postInfo={postData}
+                    notHome={true}
+                    commentBtn={() => setModal(!modal)}
+                />
 
                 <div className="flex flex-col mt-10 gap-4">
-                    <Comment />
-                    <Comment />
-                    <Comment />
-                    <Comment />
+                    {
+                        comments.map((comment) => (
+                            <Comment commentData={comment}/>
+                        ))
+                    }
                 </div>
             </div>
+
+            {modal && <AddComment modalClose={() => setModal(!modal)} post_id={postId}/>}
         </div>
     );
 };

@@ -7,7 +7,7 @@ import { deleteData, fetchData, postData } from "../../api";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
-const Post = ({ postInfo, notHome }) => {
+const Post = ({ postInfo, notHome, commentBtn }) => {
     const [userData, setUserData] = useState({}); // to store user data
     const [loading, setLoading] = useState(false); // to handle loading
     const [likesCount, setLikesCount] = useState(postInfo.likes_count);
@@ -119,7 +119,7 @@ const Post = ({ postInfo, notHome }) => {
                     Like
                 </button>
 
-                <button className="text-white text-xl flex items-center h-10 gap-2 hover:bg-neutral-900 w-full justify-center cursor-pointer">
+                <button onClick={commentBtn} className="text-white text-xl flex items-center h-10 gap-2 hover:bg-neutral-900 w-full justify-center cursor-pointer">
                     {postInfo?.comments_count !== 0 && postInfo?.comments_count}
                     {/* {postInfo?.comments_count} */}
                     <HiInbox />

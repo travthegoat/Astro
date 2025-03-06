@@ -79,4 +79,42 @@ postRouter.post('/like', async (req, res) => {
     }
 });
 
+postRouter.get('/comment/:postId', async (req, res) => {
+    const { postId } = req.params;
+
+    try {
+        const [rows] = await pool.query("SELECT * FROM comments WHERE post_id = ?", [postId]);
+        res.status(200).json(rows);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+})
+
+postRouter.post('/comment', async (req, res) => {
+    const {user_id, post_id, content} = req.body;
+    
+    try {
+        await pool.query("INSERT INTO comments (comment_id, user_id, post_id, content) VALUES (UUID(), ?, ?, ?)", [user_id, post_id, content]);
+        await pool.query("UPDATE posts SET comments_count = comments_count + 1 WHERE post_id = ?", [post_id]);
+
+        res.status(200).json({ code: "green" });
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+})
+
+postRouter.delete('/comment/:id', async (req, res) => {
+    const { id } = req.params;
+    const { post_id } = req.body;
+
+    try {
+        await pool.query("DELETE FROM comments WHERE comment_id = ?", [id]);
+        await pool.query("UPDATE posts SET comments_count = comments_count - 1 WHERE post_id = ?", [post_id]);
+
+        res.status(200).json({ code: "green" });
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+})
+
 export default postRouter;
