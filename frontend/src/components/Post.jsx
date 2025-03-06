@@ -3,29 +3,54 @@ import profileImg from "/profile.png";
 import { HiInbox, HiOutlineDotsHorizontal, HiThumbUp } from "react-icons/hi";
 import { IoThumbsUp } from "react-icons/io5";
 import postImg from "/post.png";
-import { fetchData } from "../../api";
+import { deleteData, fetchData, postData } from "../../api";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
 
-const Post = ({ postData, notHome }) => {
+const Post = ({ postInfo, notHome }) => {
     const [userData, setUserData] = useState({}); // to store user data
     const [loading, setLoading] = useState(false); // to handle loading
+    const [likesCount, setLikesCount] = useState(postInfo.likes_count);
     const navigate = useNavigate(); // to navigate
 
+    const getUserData = async () => {
+        setLoading(true);
+        try {
+            const result = await fetchData(`/users/${postInfo.user_id}`);
+            setUserData(result[0]);
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     useEffect(() => {
-        if(!postData.user_id) return;
-        const getUserData = async () => {
-            setLoading(true);
-            try {
-                const result = await fetchData(`/users/${postData.user_id}`);
-                setUserData(result[0]);
-            } catch (err) {
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        };
+        setLikesCount(postInfo.likes_count);
+        if (!postInfo.user_id) return;
         getUserData();
-    }, [postData?.user_id]);
+    }, [postInfo?.user_id]);
+
+    const like = async () => {
+        const uid = Cookies.get("uid");
+
+        setLoading(true);
+        try {
+            const result = await postData("/posts/like", {
+                user_id: uid,
+                post_id: postInfo.post_id,
+            });
+            if (result.code === "green") {
+                setLikesCount(prev => prev + 1);
+            } else {
+                setLikesCount(prev => prev - 1);
+            }
+        } catch (err) {
+            console.log(err);
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="w-full h-auto justify-start bg-[#0b0b0b] border border-neutral-900 lg:rounded-lg pt-4">
@@ -52,16 +77,23 @@ const Post = ({ postData, notHome }) => {
                 </button>
             </div>
 
-            <div className="cursor-pointer" onClick={() => navigate(`/main/posts/${postData.post_id}`)}>
+            <div
+                className="cursor-pointer"
+                onClick={() => navigate(`/main/posts/${postInfo.post_id}`)}
+            >
                 <div className="flex flex-col px-4 mt-4">
-                    <h1 className="text-white text-lg">{postData?.caption}</h1>
+                    <h1 className="text-white text-lg">{postInfo?.caption}</h1>
                 </div>
 
-                {postData?.image ? (
+                {postInfo?.image ? (
                     <div>
                         <img
-                            src={`http://localhost:3000${postData?.image}`}
-                            className={`mt-4 w-full ${notHome ? 'object-contain' : 'object-cover h-120'}`}
+                            src={`http://localhost:3000${postInfo?.image}`}
+                            className={`mt-4 w-full ${
+                                notHome
+                                    ? "object-contain"
+                                    : "object-cover h-120"
+                            }`}
                             alt=""
                         />
                     </div>
@@ -70,24 +102,26 @@ const Post = ({ postData, notHome }) => {
                 )}
             </div>
 
-
             <div
                 className={`max-w-full border border-neutral-800 ${
-                    postData?.img ? "mt-0" : "mt-4"
+                    postInfo?.img ? "mt-0" : "mt-4"
                 }`}
             ></div>
 
             <div className="flex">
-                <button className="text-white text-xl flex items-center h-10 gap-2 hover:bg-neutral-900 w-full justify-center cursor-pointer">
-                    {postData?.likes_count !== 0 && postData?.likes_count}
-                    {/* {postData?.likes_count} */}
+                <button
+                    onClick={like}
+                    className="text-white text-xl flex items-center h-10 gap-2 hover:bg-neutral-900 w-full justify-center cursor-pointer"
+                >
+                    {likesCount !== 0 && likesCount}
+                    {/* {postInfo?.likes_count} */}
                     <HiThumbUp />
                     Like
                 </button>
 
                 <button className="text-white text-xl flex items-center h-10 gap-2 hover:bg-neutral-900 w-full justify-center cursor-pointer">
-                    {postData?.comments_count !== 0 && postData?.comments_count}
-                    {/* {postData?.comments_count} */}
+                    {postInfo?.comments_count !== 0 && postInfo?.comments_count}
+                    {/* {postInfo?.comments_count} */}
                     <HiInbox />
                     Comment
                 </button>

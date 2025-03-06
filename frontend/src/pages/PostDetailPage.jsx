@@ -3,6 +3,7 @@ import { IoArrowBack } from "react-icons/io5";
 import Post from "../components/Post";
 import { useNavigate, useParams } from "react-router-dom";
 import { fetchData } from "../../api";
+import Comment from "../components/Comment";
 
 const PostDetailPage = () => {
     const { postId } = useParams(); // to get the passed post id
@@ -26,7 +27,7 @@ const PostDetailPage = () => {
     }, []);
 
     return (
-        <div className="pt-4">
+        <div className="pt-4 pb-10">
             <div className="flex px-4 2xl:px-6">
                 <button
                     className="cursor-pointer"
@@ -38,7 +39,14 @@ const PostDetailPage = () => {
 
             <div className="mt-5 2xl:mt-10 lg:px-10">
                 {/* {postData.caption} */}
-                <Post postData={postData} notHome={true}/>
+                <Post postInfo={postData} notHome={true}/>
+
+                <div className="flex flex-col mt-10 gap-4">
+                    <Comment />
+                    <Comment />
+                    <Comment />
+                    <Comment />
+                </div>
             </div>
         </div>
     );

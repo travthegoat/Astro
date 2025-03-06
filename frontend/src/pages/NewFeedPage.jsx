@@ -32,7 +32,7 @@ const NewFeedPage = () => {
 
             <div className="flex flex-col w-full mt-2 gap-4 pb-10">
                 {posts.map((post, index) => (
-                    <Post key={index} postData={post} />
+                    <Post key={index} postInfo={post} />
                 ))}
             </div>
 

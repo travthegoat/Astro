@@ -57,4 +57,26 @@ postRouter.post('/', upload.single("image"), async (req, res) => {
     }
 });
 
+postRouter.post('/like', async (req, res) => {
+    const {user_id, post_id} = req.body;
+
+    try {
+        const [existingLike] = await pool.query("SELECT * FROM likes WHERE user_id = ? AND post_id = ?", [user_id, post_id]);
+
+        if (existingLike.length > 0) {
+            await pool.query("DELETE FROM likes WHERE user_id = ? AND post_id = ?", [user_id, post_id]);
+            await pool.query("UPDATE posts SET likes_count = likes_count - 1 WHERE post_id = ?", [post_id]);
+
+            res.status(200).json({ code: "red" });
+        } else {
+            await pool.query("INSERT INTO likes (like_id, user_id, post_id) VALUES (UUID(), ?, ?)", [user_id, post_id]);
+            await pool.query("UPDATE posts SET likes_count = likes_count + 1 WHERE post_id = ?", [post_id]);
+
+            res.status(200).json({ code: "green" });
+        }
+    } catch (err) {
+        res.status(500).json({ error: err })
+    }
+});
+
 export default postRouter;
