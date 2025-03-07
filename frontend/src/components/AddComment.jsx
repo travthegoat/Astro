@@ -1,19 +1,20 @@
 import React, { useState } from "react";
 import { IoCloseCircle } from "react-icons/io5";
-import Cookies from 'js-cookie';
+import Cookies from "js-cookie";
 import { postData } from "../../api";
+import { ScaleLoader } from "react-spinners";
 
 const AddComment = ({ modalClose, post_id }) => {
-    const [comment, setComment] = useState(''); // for comment input
-    const [loading, setLoading] = useState(''); // to handle loading
+    const [comment, setComment] = useState(""); // for comment input
+    const [loading, setLoading] = useState(""); // to handle loading
 
     const submit = async (e) => {
         e.preventDefault();
-        const uid = Cookies.get('uid');
+        const uid = Cookies.get("uid");
 
         setLoading(true);
         try {
-            const result = await postData('/posts/comment', {
+            const result = await postData("/posts/comment", {
                 user_id: uid,
                 post_id: post_id,
                 content: comment,
@@ -24,7 +25,7 @@ const AddComment = ({ modalClose, post_id }) => {
         } finally {
             setLoading(false);
         }
-    }
+    };
 
     return (
         <div className="fixed top-0 left-0 right-0 bottom-0 w-full h-screen bg-black/[.8] flex justify-center items-center">
@@ -51,12 +52,16 @@ const AddComment = ({ modalClose, post_id }) => {
                         className="w-full lg:w-[70%] placeholder:text-neutral-400 border-b border-neutral-400 pb-2 outline-none text-white text-lg"
                         onChange={(e) => setComment(e.target.value)}
                     />
-                    <button
-                        type="submit"
-                        className="w-full lg:w-[30%] bg-white rounded text-xl font-bold hover:opacity-80 cursor-pointer"
-                    >
-                        Submit
-                    </button>
+                    {loading ? (
+                        <ScaleLoader />
+                    ) : (
+                        <button
+                            type="submit"
+                            className="w-full lg:w-[30%] bg-white rounded text-xl font-bold hover:opacity-80 cursor-pointer flex justify-center items-center"
+                        >
+                            Submit
+                        </button>
+                    )}
                 </form>
             </div>
         </div>

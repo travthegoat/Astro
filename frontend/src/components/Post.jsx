@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import profileImg from "/profile.png";
 import { HiInbox, HiOutlineDotsHorizontal, HiThumbUp } from "react-icons/hi";
 import { IoThumbsUp } from "react-icons/io5";
@@ -7,10 +7,11 @@ import { deleteData, fetchData, postData } from "../../api";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
-const Post = ({ postInfo, notHome, commentBtn }) => {
+const Post = ({ postInfo, notHome, onProfile, commentBtn }) => {
     const [userData, setUserData] = useState({}); // to store user data
     const [loading, setLoading] = useState(false); // to handle loading
     const [likesCount, setLikesCount] = useState(postInfo.likes_count);
+    const [open, setOpen] = useState(false);
     const navigate = useNavigate(); // to navigate
 
     const getUserData = async () => {
@@ -41,9 +42,9 @@ const Post = ({ postInfo, notHome, commentBtn }) => {
                 post_id: postInfo.post_id,
             });
             if (result.code === "green") {
-                setLikesCount(prev => prev + 1);
+                setLikesCount((prev) => prev + 1);
             } else {
-                setLikesCount(prev => prev - 1);
+                setLikesCount((prev) => prev - 1);
             }
         } catch (err) {
             console.log(err);
@@ -59,7 +60,7 @@ const Post = ({ postInfo, notHome, commentBtn }) => {
                     <img
                         src={`http://localhost:3000${userData?.profile_picture}`}
                         alt=""
-                        className="object-contain w-12 rounded-full"
+                        className="object-cover h-12 w-12 rounded-full"
                     />
                 </div>
 
@@ -72,9 +73,61 @@ const Post = ({ postInfo, notHome, commentBtn }) => {
                     </h2>
                 </div>
 
-                <button className="ml-auto mr-4 mb-5 hover:opacity-70 cursor-pointer">
-                    <HiOutlineDotsHorizontal className="text-white text-2xl" />
-                </button>
+                {Cookies.get("uid") === postInfo.user_id ? (
+                    <div className="relative ml-auto">
+                        <button
+                            onClick={() => setOpen(!open)}
+                            className="mr-4 mb-5 hover:opacity-70 cursor-pointer"
+                        >
+                            <HiOutlineDotsHorizontal className="text-white text-2xl" />
+                        </button>
+
+                        {open && (
+                            <div className="absolute right-4 top-12 bg-neutral-900 text-white rounded-lg shadow-lg w-40">
+                                <ul className="flex flex-col">
+                                    <li className="px-4 py-2 hover:bg-neutral-800 cursor-pointer rounded-t-lg">
+                                        Save
+                                    </li>
+                                    <li
+                                        onClick={() =>
+                                            navigate("/main/add-post", {
+                                                state: {
+                                                    state: "update",
+                                                    post_id: postInfo?.post_id,
+                                                },
+                                            })
+                                        }
+                                        className="px-4 py-2 hover:bg-neutral-800 cursor-pointer"
+                                    >
+                                        Edit
+                                    </li>
+                                    <li className="px-4 py-2 hover:bg-neutral-800 cursor-pointer rounded-b-lg">
+                                        Delete
+                                    </li>
+                                </ul>
+                            </div>
+                        )}
+                    </div>
+                ) : (
+                    <div className="relative ml-auto">
+                        <button
+                            onClick={() => setOpen(!open)}
+                            className="mr-4 mb-5 hover:opacity-70 cursor-pointer"
+                        >
+                            <HiOutlineDotsHorizontal className="text-white text-2xl" />
+                        </button>
+
+                        {open && (
+                            <div className="absolute right-4 top-12 bg-neutral-900 text-white rounded-lg shadow-lg w-40">
+                                <ul className="flex flex-col">
+                                    <li className="px-4 py-2 hover:bg-neutral-800 cursor-pointer rounded-lg">
+                                        Save
+                                    </li>
+                                </ul>
+                            </div>
+                        )}
+                    </div>
+                )}
             </div>
 
             <div
@@ -119,12 +172,31 @@ const Post = ({ postInfo, notHome, commentBtn }) => {
                     Like
                 </button>
 
-                <button onClick={commentBtn} className="text-white text-xl flex items-center h-10 gap-2 hover:bg-neutral-900 w-full justify-center cursor-pointer">
-                    {postInfo?.comments_count !== 0 && postInfo?.comments_count}
-                    {/* {postInfo?.comments_count} */}
-                    <HiInbox />
-                    Comment
-                </button>
+                {notHome ? (
+                    <button
+                        onClick={commentBtn}
+                        className="text-white text-xl flex items-center h-10 gap-2 hover:bg-neutral-900 w-full justify-center cursor-pointer"
+                    >
+                        {postInfo?.comments_count !== 0 &&
+                            postInfo?.comments_count}
+                        {/* {postInfo?.comments_count} */}
+                        <HiInbox />
+                        Comment
+                    </button>
+                ) : (
+                    <button
+                        onClick={() =>
+                            navigate(`/main/posts/${postInfo.post_id}`)
+                        }
+                        className="text-white text-xl flex items-center h-10 gap-2 hover:bg-neutral-900 w-full justify-center cursor-pointer"
+                    >
+                        {postInfo?.comments_count !== 0 &&
+                            postInfo?.comments_count}
+                        {/* {postInfo?.comments_count} */}
+                        <HiInbox />
+                        Comment
+                    </button>
+                )}
             </div>
         </div>
     );
