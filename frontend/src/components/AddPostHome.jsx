@@ -26,7 +26,7 @@ const AddPostHome = () => {
 
     return (
         <div className="w-full h-24 bg-[#0b0b0b] border border-neutral-900 lg:rounded-lg flex items-center px-8 gap-5">
-            <button className="cursor-pointer hover:opacity-70">
+            <button onClick={() => navigate(`/main/${Cookies.get('uid')}`)} className="cursor-pointer hover:opacity-70">
                 <img
                     src={`http://localhost:3000${userData.profile_picture}`}
                     alt=""
@@ -40,7 +40,7 @@ const AddPostHome = () => {
                         state: 'insert'
                     }
                 });
-            }} className="rounded-full bg-neutral-900 text-neutral-500 h-12 w-full px-2 lg:px-4 text-lg xl:text-xl text-start pb-1 hover:bg-neutral-800 cursor-pointer duration-75">
+            }} className="rounded-full bg-neutral-900 text-neutral-500 h-12 w-full px-2 lg:px-4 text-md xl:text-xl text-start pb-1 hover:bg-neutral-800 cursor-pointer duration-75">
                 What's on your mind, {userData?.display_name}?
             </button>
         </div>

@@ -83,14 +83,14 @@ const ProfilePage = () => {
                 </button>
             </div>
 
-            <div className="flex px-20 mt-10 justify-between border-b border-neutral-900 pb-12">
+            <div className="flex px-4 2xl:px-20 mt-10 justify-between border-b border-neutral-900 pb-12">
                 <div className="flex flex-col">
                     <div className="flex gap-4">
                         <img src={`http://localhost:3000${userData?.profile_picture}`} className="w-16 h-16 object-cover rounded-lg" alt="" />
 
                         <div className="flex flex-col justify-start ">
-                            <h1 className="text-white text-2xl font-semibold">{userData?.display_name}</h1>
-                            <h2 className="text-neutral-400 text-xl font-">@{userData?.username}</h2>
+                            <h1 className="text-white text-xl 2xl:text-2xl font-semibold">{userData?.display_name}</h1>
+                            <h2 className="text-neutral-400 text-lg 2xl:text-xl font-">@{userData?.username}</h2>
                         </div>
                     </div>
 
@@ -102,13 +102,13 @@ const ProfilePage = () => {
                 </div>
 
                 {Cookies.get('uid') === userId ? (
-                    <button className="bg-neutral-950 border border-neutral-800 text-white h-12 px-16 rounded-lg cursor-pointer hover:opacity-80">Edit</button>
+                    <button className="bg-neutral-950 border border-neutral-800 text-white h-12 px-8 lg:px-16 rounded-lg cursor-pointer hover:opacity-80">Edit</button>
                 ) : (
-                    <button onClick={followUser} disabled={false} className="bg-neutral-950 border border-neutral-800 text-white h-12 px-16 rounded-lg cursor-pointer hover:opacity-80">{isFollowing ? "Followed" : "Follow" }</button>
+                    <button onClick={followUser} disabled={false} className="bg-neutral-950 border border-neutral-800 text-white h-12 px-6 lg:px-16 rounded-lg cursor-pointer hover:opacity-80">{isFollowing ? "Followed" : "Follow" }</button>
                 )}
             </div>
 
-            <div className="flex flex-col mt-4 lg:px-10">
+            <div className="flex flex-col lg:mt-4 lg:px-4 2xl:px-20">
                 {Cookies.get('uid') === userId && (
                     <AddPostHome />
                 )}

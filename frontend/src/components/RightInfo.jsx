@@ -5,10 +5,12 @@ import { HiOutlineDotsHorizontal, HiOutlineDotsVertical } from "react-icons/hi";
 import TopUser from "./TopUser";
 import { fetchData } from "../../api";
 import Cookies from 'js-cookie';
+import { useNavigate } from "react-router-dom";
 
 const RightInfo = () => {
     const [userData, setUserData] = useState(); // to store user info
     const [loading, setLoading] = useState(false); // to handle loading
+    const navigate = useNavigate(); // to navigate
 
     useEffect(() => {
         const uid = Cookies.get('uid'); // get stored username
@@ -30,7 +32,7 @@ const RightInfo = () => {
 
     return (
         <div className="hidden lg:flex lg:flex-grow lg:flex-col w-[25%] 2xl:w-[20%] pt-8 pl-5 pr-5 2xl:pl-8 2xl:pr-0 border-l-1 border-neutral-900">
-            <div className="flex items-start gap-5 cursor-pointer">
+            <div onClick={() => navigate(`/main/${Cookies.get('uid')}`)} className="flex items-start gap-5 cursor-pointer">
                 <div className="hover:opacity-70">
                     <img
                         src={`http://localhost:3000${userData?.profile_picture}`}

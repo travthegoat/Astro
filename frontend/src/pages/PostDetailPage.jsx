@@ -65,7 +65,7 @@ const PostDetailPage = () => {
                 <div className="flex flex-col mt-10 gap-4">
                     {
                         comments.map((comment) => (
-                            <Comment commentData={comment}/>
+                            <Comment commentData={comment} />
                         ))
                     }
                 </div>
