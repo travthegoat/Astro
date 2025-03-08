@@ -50,26 +50,45 @@ postRouter.post("/", upload.single("image"), async (req, res) => {
     const [uuidRow] = await pool.query("SELECT UUID() as uuid");
     const post_id = uuidRow[0].uuid;
 
-    if (!req.file) return res.status(400).json({ error: "No file uploaded" });
+    if (!req.file) {
+        try {
+            await pool.query(
+                "INSERT INTO posts (post_id, user_id, caption, image) VALUES (?, ?, ?, ?)",
+                [post_id, user_id, caption, ""]
+            );
 
-    const imagePath = `/uploads/${req.file.filename}`;
-    try {
-        await pool.query(
-            "INSERT INTO posts (post_id, user_id, caption, image) VALUES (?, ?, ?, ?)",
-            [post_id, user_id, caption, imagePath]
-        );
-
-        const [row] = await pool.query(
-            "SELECT * FROM posts WHERE post_id = ?",
-            post_id
-        );
-        res.status(200).json({
-            message: "Successfully Created!",
-            postId: row[0].post_id,
-        });
-    } catch (err) {
-        res.status(500).json({ error: err });
+            const [row] = await pool.query(
+                "SELECT * FROM posts WHERE post_id = ?",
+                post_id
+            );
+            res.status(200).json({
+                message: "Successfully Created!",
+                postId: row[0].post_id,
+            });
+        } catch (err) {
+            res.status(500).json({ error: err });
+        }
+    } else {
+        const imagePath = `/uploads/${req.file.filename}`;
+        try {
+            await pool.query(
+                "INSERT INTO posts (post_id, user_id, caption, image) VALUES (?, ?, ?, ?)",
+                [post_id, user_id, caption, imagePath]
+            );
+    
+            const [row] = await pool.query(
+                "SELECT * FROM posts WHERE post_id = ?",
+                post_id
+            );
+            res.status(200).json({
+                message: "Successfully Created!",
+                postId: row[0].post_id,
+            });
+        } catch (err) {
+            res.status(500).json({ error: err });
+        }
     }
+
 });
 
 postRouter.post("/like", async (req, res) => {
@@ -165,7 +184,17 @@ postRouter.put("/:id", async (req, res) => {
 
     try {
         await pool.query("UPDATE posts SET caption = ? WHERE post_id = ?", [caption, id]);
+        res.status(200).json({ code: "green" });
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+});
 
+postRouter.delete('/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        await pool.query("DELETE FROM posts WHERE post_id = ?", [id]);
         res.status(200).json({ code: "green" });
     } catch (err) {
         res.status(500).json({ error: err });

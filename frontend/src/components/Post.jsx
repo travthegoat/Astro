@@ -7,7 +7,7 @@ import { deleteData, fetchData, postData } from "../../api";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
 
-const Post = ({ postInfo, notHome, onProfile, commentBtn }) => {
+const Post = ({ postInfo, notHome, commentBtn }) => {
     const [userData, setUserData] = useState({}); // to store user data
     const [loading, setLoading] = useState(false); // to handle loading
     const [likesCount, setLikesCount] = useState(postInfo.likes_count);
@@ -53,10 +53,22 @@ const Post = ({ postInfo, notHome, onProfile, commentBtn }) => {
         }
     };
 
+    const deletePost = async () => {
+        setLoading(true);
+        try {
+            const result = await deleteData(`/posts/${postInfo?.post_id}`);
+            navigate('/main/');
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    }
+
     return (
         <div className="w-full h-auto justify-start bg-[#0b0b0b] border border-neutral-900 lg:rounded-lg pt-4">
             <div className="flex flex-grow gap-4 min-w-full">
-                <div className="ml-4 cursor-pointer hover:opacity-70">
+                <div className="ml-4 cursor-pointer hover:opacity-70" onClick={() => navigate(`/main/${postInfo?.user_id}`)}>
                     <img
                         src={`http://localhost:3000${userData?.profile_picture}`}
                         alt=""
@@ -65,7 +77,7 @@ const Post = ({ postInfo, notHome, onProfile, commentBtn }) => {
                 </div>
 
                 <div className="flex flex-col">
-                    <h1 className="text-white text-lg font-semibold cursor-pointer">
+                    <h1 className="text-white text-lg font-semibold cursor-pointer" onClick={() => navigate(`/main/${postInfo?.user_id}`)}>
                         {userData?.display_name}
                     </h1>
                     <h2 className="text-neutral-500 text-sm">
@@ -101,7 +113,7 @@ const Post = ({ postInfo, notHome, onProfile, commentBtn }) => {
                                     >
                                         Edit
                                     </li>
-                                    <li className="px-4 py-2 hover:bg-neutral-800 cursor-pointer rounded-b-lg">
+                                    <li onClick={() => deletePost()} className="px-4 py-2 hover:bg-neutral-800 cursor-pointer rounded-b-lg">
                                         Delete
                                     </li>
                                 </ul>
