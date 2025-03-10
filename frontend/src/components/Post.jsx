@@ -86,7 +86,7 @@ const Post = ({ postInfo, notHome, commentBtn }) => {
     };
 
     return (
-        <div className="w-full h-auto justify-start bg-[#0b0b0b] border border-neutral-900 lg:rounded-lg pt-4">
+        <div className="w-full h-auto justify-start bg-[#0b0b0b] border border-neutral-800 lg:rounded-lg pt-4">
             <div className="flex flex-grow gap-4 min-w-full">
                 <div
                     className="ml-4 cursor-pointer hover:opacity-70"
