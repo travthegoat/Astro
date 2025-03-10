@@ -42,10 +42,10 @@ const router = createBrowserRouter([
         children: [
             { index: true, element: <Navigate to={"/main/feed"} /> },
             { path: "/main/feed", element: <NewFeedPage /> },
-            { path: "/main/:userId", element: <ProfilePage /> },
+            { path: "/main/profile/:userId", element: <ProfilePage /> },
             { path: "/main/add-post", element: <AddPostPage /> },
             { path: "/main/posts/:postId", element: <PostDetailPage /> },
-            { path: "/main/saved", element: <SavedPage />}
+            { path: "/main/saved", element: <SavedPage /> }
         ],
     },
 ]);

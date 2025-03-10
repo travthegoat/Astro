@@ -6,7 +6,7 @@ const TopUser = ({ userData }) => {
     const navigate = useNavigate(); // to navigate
 
     return (
-        <div className="flex items-start gap-5 cursor-pointer" onClick={() => navigate(`/main/${userData?.user_id}`)}>
+        <div className="flex items-start gap-5 cursor-pointer" onClick={() => navigate(`/main/profile/${userData?.user_id}`)}>
             <div className="hover:opacity-70">
                 <img
                     src={`http://localhost:3000${userData?.profile_picture}`}

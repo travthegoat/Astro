@@ -52,7 +52,7 @@ const Navbar = () => {
                 </NavLink>
 
                 <NavLink
-                    to={`/main/${Cookies.get('uid')}`}
+                    to={`/main/profile/${Cookies.get('uid')}`}
                     className={({ isActive }) => {
                         return `flex items-center gap-3 hover:bg-neutral-900 duration-300 h-12 pl-2 mr-7 rounded-md ${isActive === true ? "bg-neutral-900 text-white" : "text-neutral-500"}`
                     }}

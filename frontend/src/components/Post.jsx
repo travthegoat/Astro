@@ -12,6 +12,7 @@ const Post = ({ postInfo, notHome, commentBtn }) => {
     const [loading, setLoading] = useState(false); // to handle loading
     const [likesCount, setLikesCount] = useState(postInfo.likes_count);
     const [open, setOpen] = useState(false);
+    const [formattedDate, setFormattedDate] = useState(""); 
     const navigate = useNavigate(); // to navigate
     const uid = Cookies.get("uid");
 
@@ -20,6 +21,8 @@ const Post = ({ postInfo, notHome, commentBtn }) => {
         try {
             const result = await fetchData(`/users/${postInfo.user_id}`);
             setUserData(result[0]);
+            const date = new Date(result[0].created_at);
+            setFormattedDate(`${date.getMonth() + 1} / ${date.getDate()} / ${date.getFullYear()}`);
         } catch (err) {
             console.error(err);
         } finally {
@@ -87,7 +90,7 @@ const Post = ({ postInfo, notHome, commentBtn }) => {
             <div className="flex flex-grow gap-4 min-w-full">
                 <div
                     className="ml-4 cursor-pointer hover:opacity-70"
-                    onClick={() => navigate(`/main/${postInfo?.user_id}`)}
+                    onClick={() => navigate(`/main/profile/${postInfo?.user_id}`)}
                 >
                     <img
                         src={`http://localhost:3000${userData?.profile_picture}`}
@@ -99,12 +102,12 @@ const Post = ({ postInfo, notHome, commentBtn }) => {
                 <div className="flex flex-col">
                     <h1
                         className="text-white text-lg font-semibold cursor-pointer"
-                        onClick={() => navigate(`/main/${postInfo?.user_id}`)}
+                        onClick={() => navigate(`/main/profile/${postInfo?.user_id}`)}
                     >
                         {userData?.display_name}
                     </h1>
                     <h2 className="text-neutral-500 text-sm">
-                        Yesterday at 2:30
+                        {formattedDate}
                     </h2>
                 </div>
 
