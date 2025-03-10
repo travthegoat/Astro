@@ -115,7 +115,7 @@ const ProfilePage = () => {
                 <div className="flex flex-col">
                     <div className="flex gap-4">
                         <img
-                            src={`http://localhost:3000${userData?.profile_picture}`}
+                            src={`https://astro-1fdt.onrender.com${userData?.profile_picture}`}
                             className="w-16 h-16 object-cover rounded-lg"
                             alt=""
                         />

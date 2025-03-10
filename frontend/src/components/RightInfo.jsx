@@ -51,7 +51,7 @@ const RightInfo = () => {
             <div onClick={() => navigate(`/main/profile/${Cookies.get('uid')}`)} className="flex items-start gap-5 cursor-pointer">
                 <div className="hover:opacity-70">
                     <img
-                        src={`http://localhost:3000${userData?.profile_picture}`}
+                        src={`https://astro-1fdt.onrender.com${userData?.profile_picture}`}
                         alt=""
                         className="object-cover w-12 h-12 rounded-full"
                     />

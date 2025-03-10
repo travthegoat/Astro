@@ -32,7 +32,7 @@ const Comment = ({ commentData }) => {
             <div className="flex flex-grow gap-4 min-w-full">
                 <div className="ml-4 cursor-pointer hover:opacity-70" onClick={() => navigate(`/main/profile/${userData?.user_id}`)}>
                     <img
-                        src={`http://localhost:3000${userData?.profile_picture}`}
+                        src={`https://astro-1fdt.onrender.com${userData?.profile_picture}`}
                         alt=""
                         className="object-cover h-12 w-12 rounded-full"
                     />

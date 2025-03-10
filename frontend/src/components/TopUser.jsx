@@ -9,7 +9,7 @@ const TopUser = ({ userData }) => {
         <div className="flex items-start gap-5 cursor-pointer" onClick={() => navigate(`/main/profile/${userData?.user_id}`)}>
             <div className="hover:opacity-70">
                 <img
-                    src={`http://localhost:3000${userData?.profile_picture}`}
+                    src={`https://astro-1fdt.onrender.com${userData?.profile_picture}`}
                     alt=""
                     className="object-cover h-9 w-9 mt-1 rounded-full"
                 />

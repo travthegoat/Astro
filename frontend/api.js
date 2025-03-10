@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:3000/api/v1';
+const API_BASE_URL = 'https://astro-1fdt.onrender.com/api/v1';
 
 const apiClient = axios.create({
   baseURL: API_BASE_URL,

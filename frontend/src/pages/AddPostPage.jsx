@@ -30,7 +30,7 @@ const AddPostPage = () => {
                     const result = await fetchData(`/posts/${state?.post_id}`);
                     setCaption(result[0].caption);
                     setSelectedImage(result[0].image || "hi");
-                    setPreview(`http://localhost:3000${result[0].image}`);
+                    setPreview(`https://astro-1fdt.onrender.com${result[0].image}`);
                 } catch (err) {
                     console.error(err);
                 } finally {

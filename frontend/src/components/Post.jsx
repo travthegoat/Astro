@@ -93,7 +93,7 @@ const Post = ({ postInfo, notHome, commentBtn }) => {
                     onClick={() => navigate(`/main/profile/${postInfo?.user_id}`)}
                 >
                     <img
-                        src={`http://localhost:3000${userData?.profile_picture}`}
+                        src={`https://astro-1fdt.onrender.com${userData?.profile_picture}`}
                         alt=""
                         className="object-cover h-12 w-12 rounded-full"
                     />
@@ -188,7 +188,7 @@ const Post = ({ postInfo, notHome, commentBtn }) => {
                 {postInfo?.image ? (
                     <div>
                         <img
-                            src={`http://localhost:3000${postInfo?.image}`}
+                            src={`https://astro-1fdt.onrender.com${postInfo?.image}`}
                             className={`mt-4 w-full ${
                                 notHome
                                     ? "object-contain"
