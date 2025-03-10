@@ -7,19 +7,35 @@ const postRouter = express.Router();
 // get all posts //
 postRouter.get("/", async (req, res) => {
     try {
-        const [rows] = await pool.query("SELECT * FROM posts");
+        const [rows] = await pool.query("SELECT * FROM posts ORDER BY created_at DESC");
         res.status(200).json(rows);
     } catch (err) {
         res.status(500).json({ error: err });
     }
 });
 
+// get saved post //
+postRouter.get('/save/:id', async (req, res) => {
+    const { id } = req.params;
+
+    try {
+        const [rows] = await pool.query(
+            "SELECT posts.* FROM saves JOIN posts ON saves.post_id = posts.post_id WHERE saves.user_id = ? ORDER BY saves.saved_at DESC",
+            [id]
+        );
+        res.status(200).json(rows);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+});
+
+
 // get posts by user id //
 postRouter.get("/getByUid/:id", async (req, res) => {
     const { id } = req.params;
     try {
         const [rows] = await pool.query(
-            "SELECT * FROM posts WHERE user_id = ?",
+            "SELECT * FROM posts WHERE user_id = ? ORDER BY created_at DESC",
             [id]
         );
         res.status(200).json(rows);
@@ -91,6 +107,7 @@ postRouter.post("/", upload.single("image"), async (req, res) => {
 
 });
 
+// like a post //
 postRouter.post("/like", async (req, res) => {
     const { user_id, post_id } = req.body;
 
@@ -128,6 +145,7 @@ postRouter.post("/like", async (req, res) => {
     }
 });
 
+// get comments of a post //
 postRouter.get("/comment/:postId", async (req, res) => {
     const { postId } = req.params;
 
@@ -142,6 +160,7 @@ postRouter.get("/comment/:postId", async (req, res) => {
     }
 });
 
+// comment on a post //
 postRouter.post("/comment", async (req, res) => {
     const { user_id, post_id, content } = req.body;
 
@@ -161,6 +180,7 @@ postRouter.post("/comment", async (req, res) => {
     }
 });
 
+// delete a comment //
 postRouter.delete("/comment/:id", async (req, res) => {
     const { id } = req.params;
     const { post_id } = req.body;
@@ -178,6 +198,7 @@ postRouter.delete("/comment/:id", async (req, res) => {
     }
 });
 
+// update post caption //
 postRouter.put("/:id", async (req, res) => {
     const { id } = req.params;
     const { caption } = req.body;
@@ -190,6 +211,7 @@ postRouter.put("/:id", async (req, res) => {
     }
 });
 
+// delete post //
 postRouter.delete('/:id', async (req, res) => {
     const { id } = req.params;
 
@@ -200,5 +222,17 @@ postRouter.delete('/:id', async (req, res) => {
         res.status(500).json({ error: err });
     }
 })
+
+// save post //
+postRouter.post('/save', async (req, res) => {
+    const { user_id, post_id } = req.body;
+
+    try {
+        await pool.query("INSERT INTO saves (save_id, user_id, post_id) VALUES (UUID(), ?, ?)", [user_id, post_id]);
+        res.status(200).json({ code: "green" });
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+});
 
 export default postRouter;

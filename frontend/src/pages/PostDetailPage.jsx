@@ -54,7 +54,7 @@ const PostDetailPage = () => {
                 </button>
             </div>
 
-            <div className="mt-5 2xl:mt-10 lg:px-10">
+            <div className="mt-5 2xl:mt-10 lg:px-4 2xl:px-14">
                 {/* {postData.caption} */}
                 <Post
                     postInfo={postData}

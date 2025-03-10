@@ -28,6 +28,16 @@ userRouter.get("/", async (req, res) => {
     }
 });
 
+// get top users //
+userRouter.get("/topUsers", async (req, res) => {
+    try {
+        const [rows] = await pool.query("SELECT users.user_id, users.display_name, users.username, users.profile_picture, COUNT(follows.following_id) AS followers_count FROM users JOIN follows ON users.user_id = follows.following_id GROUP BY users.user_id, users.username ORDER BY followers_count DESC LIMIT 5");
+        res.status(200).json(rows);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }    
+})
+
 userRouter.get('/isFollowing', async (req, res) => {
     const { followerId, followingId } = req.query;
 

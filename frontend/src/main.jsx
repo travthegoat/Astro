@@ -9,7 +9,6 @@ import {
 import InitialPage from "./pages/InitialPage";
 import NewFeedPage from "./pages/NewFeedPage";
 import MainLayout from "./layouts/MainLayout";
-import SearchPage from "./pages/SearchPage";
 import ProfilePage from "./pages/ProfilePage";
 import AuthLayout from "./layouts/AuthLayout";
 import LoginPage from "./pages/LoginPage";
@@ -17,6 +16,7 @@ import RegisterPage from "./pages/RegisterPage";
 import CompleteRegisterPage from "./pages/completeRegisterPage";
 import AddPostPage from "./pages/AddPostPage";
 import PostDetailPage from "./pages/PostDetailPage";
+import SavedPage from "./pages/SavedPage";
 
 const router = createBrowserRouter([
     {
@@ -42,10 +42,10 @@ const router = createBrowserRouter([
         children: [
             { index: true, element: <Navigate to={"/main/feed"} /> },
             { path: "/main/feed", element: <NewFeedPage /> },
-            { path: "/main/search", element: <SearchPage /> },
             { path: "/main/:userId", element: <ProfilePage /> },
             { path: "/main/add-post", element: <AddPostPage /> },
             { path: "/main/posts/:postId", element: <PostDetailPage /> },
+            { path: "/main/saved", element: <SavedPage />}
         ],
     },
 ]);

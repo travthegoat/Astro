@@ -13,6 +13,7 @@ const Post = ({ postInfo, notHome, commentBtn }) => {
     const [likesCount, setLikesCount] = useState(postInfo.likes_count);
     const [open, setOpen] = useState(false);
     const navigate = useNavigate(); // to navigate
+    const uid = Cookies.get("uid");
 
     const getUserData = async () => {
         setLoading(true);
@@ -53,11 +54,15 @@ const Post = ({ postInfo, notHome, commentBtn }) => {
         }
     };
 
-    const deletePost = async () => {
+    const savePost = async () => {
         setLoading(true);
         try {
-            const result = await deleteData(`/posts/${postInfo?.post_id}`);
-            navigate('/main/');
+            const result = await postData("/posts/save", {
+                user_id: uid,
+                post_id: postInfo.post_id,
+            });
+            setOpen(false);
+            alert("Post saved!");
         } catch (err) {
             console.error(err);
         } finally {
@@ -65,10 +70,25 @@ const Post = ({ postInfo, notHome, commentBtn }) => {
         }
     }
 
+    const deletePost = async () => {
+        setLoading(true);
+        try {
+            const result = await deleteData(`/posts/${postInfo?.post_id}`);
+            navigate("/main/");
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     return (
         <div className="w-full h-auto justify-start bg-[#0b0b0b] border border-neutral-900 lg:rounded-lg pt-4">
             <div className="flex flex-grow gap-4 min-w-full">
-                <div className="ml-4 cursor-pointer hover:opacity-70" onClick={() => navigate(`/main/${postInfo?.user_id}`)}>
+                <div
+                    className="ml-4 cursor-pointer hover:opacity-70"
+                    onClick={() => navigate(`/main/${postInfo?.user_id}`)}
+                >
                     <img
                         src={`http://localhost:3000${userData?.profile_picture}`}
                         alt=""
@@ -77,7 +97,10 @@ const Post = ({ postInfo, notHome, commentBtn }) => {
                 </div>
 
                 <div className="flex flex-col">
-                    <h1 className="text-white text-lg font-semibold cursor-pointer" onClick={() => navigate(`/main/${postInfo?.user_id}`)}>
+                    <h1
+                        className="text-white text-lg font-semibold cursor-pointer"
+                        onClick={() => navigate(`/main/${postInfo?.user_id}`)}
+                    >
                         {userData?.display_name}
                     </h1>
                     <h2 className="text-neutral-500 text-sm">
@@ -97,7 +120,10 @@ const Post = ({ postInfo, notHome, commentBtn }) => {
                         {open && (
                             <div className="absolute right-4 top-12 bg-neutral-900 text-white rounded-lg shadow-lg w-40">
                                 <ul className="flex flex-col">
-                                    <li className="px-4 py-2 hover:bg-neutral-800 cursor-pointer rounded-t-lg">
+                                    <li
+                                        onClick={savePost}
+                                        className="px-4 py-2 hover:bg-neutral-800 cursor-pointer rounded-t-lg"
+                                    >
                                         Save
                                     </li>
                                     <li
@@ -113,7 +139,10 @@ const Post = ({ postInfo, notHome, commentBtn }) => {
                                     >
                                         Edit
                                     </li>
-                                    <li onClick={() => deletePost()} className="px-4 py-2 hover:bg-neutral-800 cursor-pointer rounded-b-lg">
+                                    <li
+                                        onClick={() => deletePost()}
+                                        className="px-4 py-2 hover:bg-neutral-800 cursor-pointer rounded-b-lg"
+                                    >
                                         Delete
                                     </li>
                                 </ul>
@@ -132,7 +161,10 @@ const Post = ({ postInfo, notHome, commentBtn }) => {
                         {open && (
                             <div className="absolute right-4 top-12 bg-neutral-900 text-white rounded-lg shadow-lg w-40">
                                 <ul className="flex flex-col">
-                                    <li className="px-4 py-2 hover:bg-neutral-800 cursor-pointer rounded-lg">
+                                    <li
+                                        onClick={savePost}
+                                        className="px-4 py-2 hover:bg-neutral-800 cursor-pointer rounded-lg"
+                                    >
                                         Save
                                     </li>
                                 </ul>

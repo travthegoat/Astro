@@ -9,6 +9,7 @@ import { useNavigate } from "react-router-dom";
 
 const RightInfo = () => {
     const [userData, setUserData] = useState(); // to store user info
+    const [topUsers, setTopUsers] = useState([]); // to store top users
     const [loading, setLoading] = useState(false); // to handle loading
     const navigate = useNavigate(); // to navigate
 
@@ -27,7 +28,22 @@ const RightInfo = () => {
                 setLoading(false);
             }
         }
+
+        const getTopUsers = async () => {
+            setLoading(true);
+            try {
+                const result = await fetchData("/users/topUsers");
+                console.log(result);
+                setTopUsers(result);
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        }
+
         getUserData();
+        getTopUsers();
     }, []);
 
     return (
@@ -57,11 +73,9 @@ const RightInfo = () => {
                 </h1>
 
                 <div className="flex flex-col gap-3">
-                    <TopUser />
-                    <TopUser />
-                    <TopUser />
-                    <TopUser />
-                    <TopUser />
+                    {topUsers.map((user, index) => (
+                        <TopUser key={index} userData={user} />
+                    ))}
                 </div>
             </div>
         </div>

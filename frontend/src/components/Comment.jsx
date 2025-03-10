@@ -41,10 +41,6 @@ const Comment = ({ commentData }) => {
                         Yesterday at 2:30
                     </h2>
                 </div>
-
-                <button className="ml-auto mr-4 mb-5 hover:opacity-70 cursor-pointer">
-                    <HiOutlineDotsHorizontal className="text-white text-2xl" />
-                </button>
             </div>
 
             <div className="mt-4 ml-4 mb-5">

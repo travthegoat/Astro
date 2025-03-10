@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import {
     IoExit,
@@ -8,6 +8,10 @@ import {
     IoPerson,
     IoSearch,
     IoSettings,
+    IoAdd,
+    IoAddCircleOutline,
+    IoSaveOutline,
+    IoArchiveOutline
 } from "react-icons/io5";
 import Cookies from 'js-cookie';
 
@@ -35,26 +39,15 @@ const Navbar = () => {
                 </NavLink>
 
                 <NavLink
-                    to={"/main/search"}
+                    to={"/main/add-post"}
+                    state={{ func: 'insert' }}
                     className={({ isActive }) => {
                         return `flex items-center gap-3 hover:bg-neutral-900 duration-300 h-12 pl-2 mr-7 rounded-md ${isActive === true ? "bg-neutral-900 text-white" : "text-neutral-500"}`
                     }}
                 >
-                    <IoSearch className="text-2xl active" />
+                    <IoAddCircleOutline className="text-2xl active" />
                     <h2 className="text-xl font-semibold active">
-                        Search
-                    </h2>
-                </NavLink>
-
-                <NavLink
-                    to={"/main/notifications"}
-                    className={({ isActive }) => {
-                        return `flex items-center gap-3 hover:bg-neutral-900 duration-300 h-12 pl-2 mr-7 rounded-md ${isActive === true ? "bg-neutral-900 text-white" : "text-neutral-500"}`
-                    }}
-                >
-                    <IoNotifications className="text-2xl text-neutral-500 active" />
-                    <h2 className="text-xl text-neutral-500 font-semibold active">
-                        Notifications
+                        Add Post
                     </h2>
                 </NavLink>
 
@@ -71,14 +64,14 @@ const Navbar = () => {
                 </NavLink>
 
                 <NavLink
-                    to={"/main/settings"}
+                    to={"/main/saved"}
                     className={({ isActive }) => {
                         return `flex items-center gap-3 hover:bg-neutral-900 duration-300 h-12 pl-2 mr-7 rounded-md ${isActive === true ? "bg-neutral-900 text-white" : "text-neutral-500"}`
                     }}
                 >
-                    <IoSettings className="text-2xl text-neutral-500 active" />
+                    <IoArchiveOutline className="text-2xl text-neutral-500 active" />
                     <h2 className="text-xl text-neutral-500 font-semibold active">
-                        Settings
+                        Saved
                     </h2>
                 </NavLink>
             </div>

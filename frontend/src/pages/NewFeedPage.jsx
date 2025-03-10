@@ -13,7 +13,8 @@ const NewFeedPage = () => {
             setLoading(true);
             try {
                 const result = await fetchData('/posts');
-                setPosts(result);
+                const shuffledPosts = result.sort(() => Math.random() - 0.5);
+                setPosts(shuffledPosts);
             } catch (err) {
                 console.err(err);
             } finally {
