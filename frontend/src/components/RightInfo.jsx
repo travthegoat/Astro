@@ -31,7 +31,7 @@ const RightInfo = () => {
     }, []);
 
     return (
-        <div className="hidden lg:flex lg:flex-grow lg:flex-col w-[25%] 2xl:w-[20%] pt-8 pl-5 pr-5 2xl:pl-8 2xl:pr-0 border-l-1 border-neutral-900">
+        <div className="hidden lg:flex lg:flex-grow lg:flex-col w-[25%] 2xl:w-[20%] pt-8 pl-5 pr-5 2xl:pl-8 2xl:pr-0 border-l-1 border-neutral-800">
             <div onClick={() => navigate(`/main/${Cookies.get('uid')}`)} className="flex items-start gap-5 cursor-pointer">
                 <div className="hover:opacity-70">
                     <img

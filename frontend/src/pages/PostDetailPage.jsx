@@ -7,10 +7,10 @@ import Comment from "../components/Comment";
 import AddComment from "../components/AddComment";
 
 const PostDetailPage = () => {
-    const { postId } = useParams(); // to get the passed post id
-    const [postData, setPostData] = useState({}); // to store post data
-    const [comments, setComments] = useState([]); // to store comments
-    const [loading, setLoading] = useState(false); // to handle loading
+    const { postId } = useParams(); // to get the passed post id      
+    const [postData, setPostData] = useState({}); // to store post data      
+    const [comments, setComments] = useState([]); // to store comments      
+    const [loading, setLoading] = useState(false); // to handle loading      
     const navigate = useNavigate(); // to navigate
     const [modal, setModal] = useState(false);
 

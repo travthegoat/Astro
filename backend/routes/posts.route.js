@@ -1,6 +1,6 @@
 import express from "express";
 import pool from "../database.js";
-import upload from "../fileManager.js";
+import { upload } from "../fileManager.js";
 
 const postRouter = express.Router();
 

@@ -1,5 +1,6 @@
 import multer from "multer";
 import path from 'path';
+import fs from "fs";
 
 // Set storage engine
 const storage = multer.diskStorage({
@@ -23,4 +24,15 @@ const upload = multer({
   },
 });
 
-export default upload;
+const deleteFile = (filePath) => {
+    fs.unlink(filePath, (err) => {
+      if (err) {
+        console.error("Error deleting file:", err);
+      } else {
+        console.log("File deleted:", filePath);
+      }
+    });
+  };
+  
+
+export { upload, deleteFile };

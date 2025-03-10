@@ -104,7 +104,7 @@ const Post = ({ postInfo, notHome, commentBtn }) => {
                                         onClick={() =>
                                             navigate("/main/add-post", {
                                                 state: {
-                                                    state: "update",
+                                                    func: "update",
                                                     post_id: postInfo?.post_id,
                                                 },
                                             })

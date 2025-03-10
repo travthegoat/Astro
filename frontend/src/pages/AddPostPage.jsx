@@ -13,14 +13,21 @@ const AddPostPage = () => {
     const [caption, setCaption] = useState(""); // for caption input
     const navigate = useNavigate(); // to navigate
     const location = useLocation();
+    const state = location.state || {}; // Provide default empty object
 
     useEffect(() => {
-        if (location.state.state === "update") {
+        if (!state.func) {
+            navigate("/main");
+        }
+
+        console.log(location.state);
+
+        if (state?.func === "update") {
             const getPostInfo = async () => {
                 setLoading(true);
                 try {
                     const result = await fetchData(
-                        `/posts/${location.state.post_id}`
+                        `/posts/${state?.post_id}`
                     );
                     setCaption(result[0].caption);
                     setSelectedImage("hi");
@@ -48,42 +55,52 @@ const AddPostPage = () => {
     const createPost = async (e) => {
         e.preventDefault();
 
-        const formData = new FormData();
-        formData.append("user_id", uid);
-        formData.append("caption", caption);
-        formData.append("image", selectedImage);
-
-        setLoading(true);
-        try {
-            const result = await postData("/posts", formData, {
-                headers: {
-                    "Content-Type": "multipart/form-data",
-                },
-            });
-            console.log(result);
-            navigate(`/main/posts/${result.postId}`);
-        } catch (err) {
-            console.error(err);
-        } finally {
-            setLoading(false);
+        if (caption !== "") {
+            const formData = new FormData();
+            formData.append("user_id", uid);
+            formData.append("caption", caption);
+            formData.append("image", selectedImage);
+    
+            setLoading(true);
+            try {
+                const result = await postData("/posts", formData, {
+                    headers: {
+                        "Content-Type": "multipart/form-data",
+                    },
+                });
+                console.log(result);
+                navigate(`/main/posts/${result.postId}`);
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        } else {
+            return;
         }
     };
 
     const updatePost = async (e) => {
         e.preventDefault();
 
-        setLoading(true);
-        try {
-            const result = await updateData(`/posts/${location.state.post_id}`, {
-                caption: caption
-            });
-            navigate(`/main/posts/${location.state.post_id}`);  
-        } catch (err) {
-
-        } finally {
-            setLoading(false);
+        if (caption !== "") {
+            setLoading(true);
+            try {
+                const result = await updateData(
+                    `/posts/${state.post_id}`,
+                    {
+                        caption: caption,
+                    }
+                );
+                navigate(`/main/posts/${state.post_id}`);
+            } catch (err) {
+            } finally {
+                setLoading(false);
+            }
+        } else {
+            return;
         }
-    }
+    };
 
     return (
         <form className="pt-4">
@@ -95,8 +112,11 @@ const AddPostPage = () => {
                     <IoArrowBack className="text-white hover:text-neutral-200 text-2xl 2xl:text-3xl" />
                 </button>
 
-                {location.state.state === "insert" ? (
-                    <button onClick={createPost} className="cursor-pointer">
+                {state?.func === "insert" ? (
+                    <button
+                        onClick={createPost}
+                        className="cursor-pointer"
+                    >
                         {loading ? (
                             <ScaleLoader />
                         ) : (
@@ -104,7 +124,11 @@ const AddPostPage = () => {
                         )}
                     </button>
                 ) : (
-                    <button onClick={updatePost} type="submit" className="cursor-pointer">
+                    <button
+                        onClick={updatePost}
+                        type="submit"
+                        className="cursor-pointer"
+                    >
                         {loading ? (
                             <ScaleLoader />
                         ) : (
@@ -123,14 +147,14 @@ const AddPostPage = () => {
                     required={true}
                 ></textarea>
 
-                {location.state.state === "insert" && selectedImage === "" ? (
+                {state?.func === "insert" && selectedImage === "" ? (
                     <label className="cursor-pointer w-full lg:w-[30%] h-56 bg-neutral-950 border border-neutral-900 rounded flex justify-center items-center text-white text-5xl font-extrabold pb-5 pr-1">
                         +
                         <input
                             type="file"
                             accept="image/*"
                             className="hidden"
-                            onChange={handleImageChange}
+                            onChange={handleImageChange}    
                         />
                     </label>
                 ) : (
@@ -141,7 +165,7 @@ const AddPostPage = () => {
                                 setPreview("");
                             }
                         }}
-                        src={preview}
+                        src={state?.func === "update" ? "/plus.png" : preview}
                         className="w-[30%] h-56 bg-neutral-95 rounded cursor-pointer object-cover"
                     />
                 )}

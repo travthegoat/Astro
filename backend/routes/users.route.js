@@ -1,6 +1,6 @@
 import express from "express";
 import pool from "../database.js";
-import upload from "../fileManager.js";
+import { upload, deleteFile } from "../fileManager.js";
 
 const userRouter = express.Router();
 
@@ -45,19 +45,21 @@ userRouter.get('/isFollowing', async (req, res) => {
     }
 });
 
-// Get single user by ID //
-userRouter.get("/:id", async (req, res) => {
+userRouter.get('/followCounts/:id', async (req, res) => {
     const { id } = req.params;
+
     try {
-        const [row] = await pool.query(
-            "SELECT * FROM users WHERE user_id = ?",
-            [id]
-        );
-        res.status(200).json(row);
+        const [followers] = await pool.query("SELECT COUNT(*) AS followers_count FROM follows WHERE following_id = ?", [id]);
+        const [following] = await pool.query("SELECT COUNT(*) AS following_count FROM follows WHERE follower_id = ?", [id]);
+
+        res.status(200).json({
+            followers: followers[0].followers_count,
+            following: following[0].following_count
+        });
     } catch (err) {
         res.status(500).json({ error: err });
     }
-});
+})
 
 // Create a new user //
 userRouter.post("/", async (req, res) => {
@@ -94,6 +96,22 @@ userRouter.put("/register/:id", upload.single("image"), async (req, res) => {
         res.status(500).json({ error: err });
     }
 });
+
+// update User //
+userRouter.put("/:id", async (req, res) => {
+    const { id } = req.params;
+    const { display_name } = req.body;
+
+    try {
+        const response = await pool.query(
+            "UPDATE users SET display_name = ? WHERE user_id = ?",
+            [display_name, id]
+        );
+        res.status(200).json({ success: true });
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+})
 
 // follow a user //
 userRouter.post("/follow", async (req, res) => {
@@ -152,7 +170,19 @@ userRouter.get("/following/:id", async (req, res) => {
     }
 });
 
-// is following //
+// Get single user by ID //
+userRouter.get("/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+        const [row] = await pool.query(
+            "SELECT * FROM users WHERE user_id = ?",
+            [id]
+        );
+        res.status(200).json(row);
+    } catch (err) {
+        res.status(500).json({ error: err });
+    }
+});
 
 
 

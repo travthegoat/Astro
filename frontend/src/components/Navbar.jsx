@@ -15,7 +15,7 @@ const Navbar = () => {
     const navigate = useNavigate(); // to navigate 
 
     return (
-        <div className="hidden lg:flex lg:flex-col lg:flex-grow w-[25%] 2xl:w-[20%] h-screen pt-8 pl-10 border-r-1 border-neutral-900">
+        <div className="hidden lg:flex lg:flex-col lg:flex-grow w-[25%] 2xl:w-[20%] h-screen pt-8 pl-10 border-r-1 border-neutral-800">
             {/** Title */}
             <h1 className="text-5xl font-extrabold text-white ml-2">
                 <i>ASTRO</i>

@@ -37,10 +37,10 @@ const AddPostHome = () => {
             <button onClick={() => {
                 navigate('/main/add-post', {
                     state: {
-                        state: 'insert'
+                        func: 'insert'
                     }
                 });
-            }} className="rounded-full bg-neutral-900 text-neutral-500 h-12 w-full px-2 lg:px-4 text-md xl:text-xl text-start pb-1 hover:bg-neutral-800 cursor-pointer duration-75">
+            }} className="rounded-full bg-neutral-900 text-neutral-500 h-12 w-full px-2 lg:px-4 text-sm md:text-lg 2xl:text-xl text-start pb-1 hover:bg-neutral-800 cursor-pointer duration-75">
                 What's on your mind, {userData?.display_name}?
             </button>
         </div>
