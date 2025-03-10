@@ -22,20 +22,16 @@ const RegisterPage = () => {
                 password: password,
             }); // create user
             console.log(result);
-            setTimeout(async () => {
-                const userData = await fetchData(
-                    `/users/search?username=${username}`
-                ); // get user data using the username
-    
-                Cookies.set("uid", userData[0].user_id, { expires: 7 });
-                navigate("/auth/complete-register", {
-                    state: {
-                        uid: userData[0].user_id,
-                    },
-                });
-            }, 2000)
+            const userData = await fetchData(
+                `/users/search?username=${username}`
+            ); // get user data using the username
 
-
+            Cookies.set("uid", userData[0].user_id, { expires: 7 });
+            navigate("/auth/complete-register", {
+                state: {
+                    uid: userData[0].user_id,
+                },
+            });
         } catch (err) {
             if (err.response.data.error.code === "ER_DUP_ENTRY") {
                 setError("Email or Username already in use!");

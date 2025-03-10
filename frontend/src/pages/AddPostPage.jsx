@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Cookies from "js-cookie";
 import { IoArrowBack, IoSaveOutline } from "react-icons/io5";
 import { ScaleLoader } from "react-spinners";
@@ -14,6 +14,7 @@ const AddPostPage = () => {
     const navigate = useNavigate(); // to navigate
     const location = useLocation();
     const state = location.state || {}; // Provide default empty object
+    const fileInputRef = useRef(null); // Ref for input field
 
     useEffect(() => {
         if (!state.func) {
@@ -26,11 +27,9 @@ const AddPostPage = () => {
             const getPostInfo = async () => {
                 setLoading(true);
                 try {
-                    const result = await fetchData(
-                        `/posts/${state?.post_id}`
-                    );
+                    const result = await fetchData(`/posts/${state?.post_id}`);
                     setCaption(result[0].caption);
-                    setSelectedImage("hi");
+                    setSelectedImage(result[0].image || "hi");
                     setPreview(`http://localhost:3000${result[0].image}`);
                 } catch (err) {
                     console.error(err);
@@ -46,10 +45,8 @@ const AddPostPage = () => {
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
-        if (file) {
-            setSelectedImage(file);
-            setPreview(URL.createObjectURL(file));
-        }
+        setSelectedImage(file);
+        setPreview(URL.createObjectURL(file));
     };
 
     const createPost = async (e) => {
@@ -60,7 +57,7 @@ const AddPostPage = () => {
             formData.append("user_id", uid);
             formData.append("caption", caption);
             formData.append("image", selectedImage);
-    
+
             setLoading(true);
             try {
                 const result = await postData("/posts", formData, {
@@ -71,7 +68,9 @@ const AddPostPage = () => {
                 console.log(result);
                 navigate(`/main/posts/${result.postId}`);
             } catch (err) {
-                console.error(err);
+                alert(
+                    "Invalid file type! Please select a JPG, JPEG, or PNG image."
+                );
             } finally {
                 setLoading(false);
             }
@@ -86,12 +85,9 @@ const AddPostPage = () => {
         if (caption !== "") {
             setLoading(true);
             try {
-                const result = await updateData(
-                    `/posts/${state.post_id}`,
-                    {
-                        caption: caption,
-                    }
-                );
+                const result = await updateData(`/posts/${state.post_id}`, {
+                    caption: caption,
+                });
                 navigate(`/main/posts/${state.post_id}`);
             } catch (err) {
             } finally {
@@ -113,10 +109,7 @@ const AddPostPage = () => {
                 </button>
 
                 {state?.func === "insert" ? (
-                    <button
-                        onClick={createPost}
-                        className="cursor-pointer"
-                    >
+                    <button onClick={createPost} className="cursor-pointer">
                         {loading ? (
                             <ScaleLoader />
                         ) : (
@@ -154,18 +147,19 @@ const AddPostPage = () => {
                             type="file"
                             accept="image/*"
                             className="hidden"
-                            onChange={handleImageChange}    
+                            ref={fileInputRef}
+                            onChange={handleImageChange}
                         />
                     </label>
                 ) : (
                     <img
                         onClick={() => {
-                            if (location.state.state === "insert") {
+                            if (state?.func === "insert") {
                                 setSelectedImage("");
                                 setPreview("");
                             }
                         }}
-                        src={state?.func === "update" ? "/plus.png" : preview}
+                        src={selectedImage === "hi" ? "/plus.png" : preview}
                         className="w-[30%] h-56 bg-neutral-95 rounded cursor-pointer object-cover"
                     />
                 )}

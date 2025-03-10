@@ -11,7 +11,7 @@ const TopUser = ({ userData }) => {
                 <img
                     src={`http://localhost:3000${userData?.profile_picture}`}
                     alt=""
-                    className="object-contain w-9 mt-1 rounded-full"
+                    className="object-cover h-9 w-9 mt-1 rounded-full"
                 />
             </div>
 
