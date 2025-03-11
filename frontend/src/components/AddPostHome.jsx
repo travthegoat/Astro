@@ -25,7 +25,7 @@ const AddPostHome = () => {
     }, []);
 
     return (
-        <div className="w-full h-24 bg-[#0b0b0b] border border-neutral-900 lg:rounded-lg flex items-center px-8 gap-5">
+        <div className="w-full h-24 bg-[#0b0b0b] border border-neutral-800 lg:rounded-lg flex items-center px-8 gap-5">
             <button onClick={() => navigate(`/main/profile/${Cookies.get('uid')}`)} className="cursor-pointer hover:opacity-70">
                 <img
                     src={`https://astro-1fdt.onrender.com${userData.profile_picture}`}
