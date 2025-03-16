@@ -13,7 +13,7 @@ const InitialPage = () => {
     return (
         <div className="w-full h-screen flex justify-center items-center">
             <button className="cursor-pointer text-white hover:text-neutral-700 duration-300">
-                <i className="text-[70px] font-extrabold">FNITY</i>
+                <i className="text-[70px] font-extrabold">ASTRO</i>
             </button>
         </div>
     );
