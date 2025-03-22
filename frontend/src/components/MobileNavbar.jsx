@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom";
 import Cookies from 'js-cookie';
 
 const MobileNavbar = () => {
-    const [toggle, setToggle] = useState(false); // to handle navbar toggle
+    const [toggle, setToggle] = useState(false); // to handle navbar toggl
 
     return (
         <div className="lg:hidden w-full bg-[#0b0b0b] h-18 border border-neutral-800 flex items-center px-6 justify-between">
@@ -16,7 +16,7 @@ const MobileNavbar = () => {
                 onClick={() => setToggle(!toggle)}
             />
 
-            <div className={`absolute top-0 right-0 ${toggle ? "translate-x-0" : "translate-x-[400px]"} w-[80%] h-screen z-10 bg-neutral-900 pt-4 px-4 duration-300`}>
+            <div className={`absolute top-0 right-0 ${toggle ? "block" : "hidden"} w-[80%] h-screen z-10 bg-neutral-900 pt-4 px-4 duration-300`}>
                 <IoCloseCircle className="text-white text-4xl" onClick={() => setToggle(!toggle)}/>
 
                 <div className="flex flex-col mt-10">

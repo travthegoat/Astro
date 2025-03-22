@@ -5,7 +5,7 @@ import { postData } from "../../api";
 import { ScaleLoader } from "react-spinners";
 
 const AddComment = ({ modalClose, post_id }) => {
-    const [comment, setComment] = useState(""); // for comment input
+    const [comment, setComment] = useState(''); // for comment input
     const [loading, setLoading] = useState(""); // to handle loading
 
     const submit = async (e) => {
